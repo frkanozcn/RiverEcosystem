@@ -1,14 +1,19 @@
 package testers;
 
+import implementations.Animal;
+
+import utils.ArrayHelper;
+import utils.PrinterHelper;
+
 public class Tester {
 
-	public Tester() {
-		// TODO Auto-generated constructor stub
-	}
+	private static final int NUMBER_OF_ANIMALS = 10;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		ArrayHelper arrayHelper = new ArrayHelper();
+		Animal[] animals = arrayHelper.generateAnimalArray(NUMBER_OF_ANIMALS);
+		PrinterHelper printerHelper = new PrinterHelper();
+		printerHelper.printAnimalArray(animals);
 	}
 
 }
