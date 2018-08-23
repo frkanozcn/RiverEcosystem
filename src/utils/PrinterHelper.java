@@ -11,6 +11,7 @@ public class PrinterHelper {
 	private static final String NOT_MOVING = " is not moving";
 	private static final String EMPTY_STRING = "";
 	private static final String COMMA_AND_SPACE = ", ";
+	private static final String AVAILABLE_ANIMAL_SLOTS = "Available animal slots: ";
 
 	public void print(String input) {
 		System.out.println(input);
@@ -21,7 +22,6 @@ public class PrinterHelper {
 			for (Animal animal : animals) {
 				if (animal != null) {
 					String animalName = animal.getName();
-					print(animalName);
 					if (animal.isMoving()) {
 						print(animalName + MOVING);
 					} else {
@@ -41,11 +41,11 @@ public class PrinterHelper {
 				toPrint = toPrint.concat(currentAnimalSlot);
 				toPrint = toPrint.concat(COMMA_AND_SPACE);
 			}
-			if (!toPrint.isEmpty() ) {
+			if (!toPrint.isEmpty()) {
 				int toPrintSize = toPrint.length();
-				toPrint = toPrint.substring(ZERO, toPrintSize-2);
+				toPrint = toPrint.substring(ZERO, toPrintSize - 2);
 			}
-			print(toPrint);
+			print(AVAILABLE_ANIMAL_SLOTS + toPrint);
 		}
 	}
 }

@@ -13,12 +13,14 @@ public class ArrayHelper {
 	private static final int ZERO = 0;
 	private static final int ONE = 1;
 	private static final int TWO = 2;
+	private static final int INVALID_INDEX = -1;
 	// strings
 	private static final String ARRAY_IS_NULL = "Array is null";
 	private static final String NO_ENTRY = "No life in the river";
 	private static final String OUT_OF_INDEX = "Index is not in the range";
 	private static final String GENERATION_DONE = "Animal array is generated.";
 	private static final String ANIMAL = "animal";
+	private static final String INVALID_NEXT_INDEX = "Next index is invalid";
 
 	public Animal[] deleteFromArray(Animal[] animals, int index) {
 		int numberOfAnimals = ZERO;
@@ -36,13 +38,11 @@ public class ArrayHelper {
 			return animals;
 		}
 		Animal[] animalTemp = new Animal[numberOfAnimals - 1];
-		int tempArrayIndexCounter = 0;
 		for (int currentIndex = 0; currentIndex < numberOfAnimals; currentIndex++) {
 			if (currentIndex != index) {
-				animalTemp[tempArrayIndexCounter] = animals[currentIndex];
-				print("Current index = " + currentIndex + " set to " + tempArrayIndexCounter);
-				tempArrayIndexCounter++;
+				animalTemp[currentIndex] = animals[currentIndex];
 			} else {
+				animalTemp[currentIndex] = new Animal();
 				print("Element with the index of " + currentIndex + " is deleted.");
 			}
 		}
@@ -105,11 +105,33 @@ public class ArrayHelper {
 		List<Integer> availableAnimalSlots = new ArrayList<Integer>();
 		for (int index = 0; index < animals.length; index++) {
 			Animal currentAnimal = animals[index];
-			if (currentAnimal != null && currentAnimal.getName() != null && currentAnimal.getName().equalsIgnoreCase(ANIMAL)) {
+			if (currentAnimal != null && currentAnimal.getName() != null
+					&& currentAnimal.getName().equalsIgnoreCase(ANIMAL)) {
 				availableAnimalSlots.add(index);
 			}
 		}
 		return availableAnimalSlots;
+	}
+
+	public int nextIndex(int index, Animal[] animals) {
+		if (animals != null && animals.length > 0) {
+			return (index + 1) % animals.length;
+		} else {
+			print(INVALID_NEXT_INDEX);
+			return INVALID_INDEX;
+		}
+	}
+
+	public void dealWithCollision(int index, Animal[] animals) {
+
+	}
+
+	public void moveWithoutCollision(int index, Animal[] animals) {
+
+	}
+
+	public void doNotMove(int index, Animal[] animals) {
+
 	}
 
 	private void print(String toBePrinted) {
