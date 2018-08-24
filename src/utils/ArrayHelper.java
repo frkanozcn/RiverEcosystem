@@ -19,8 +19,9 @@ public class ArrayHelper {
 	private static final String NO_ENTRY = "No life in the river";
 	private static final String OUT_OF_INDEX = "Index is not in the range";
 	private static final String GENERATION_DONE = "Animal array is generated.";
-	private static final String ANIMAL = "animal";
 	private static final String INVALID_NEXT_INDEX = "Next index is invalid";
+	private static final String NO_AVAILABLE_SPACE = "No available space for new animal";
+	private static final String NO_ONE_TO_MOVE = "No animal found to move";
 
 	public Animal[] deleteFromArray(Animal[] animals, int index) {
 		int numberOfAnimals = ZERO;
@@ -79,41 +80,108 @@ public class ArrayHelper {
 		return animal;
 	}
 
-	public void decideToMove(Animal[] animals) {
-		for (int index = 0; index < animals.length; index++) {
-			double decideToMove = Math.random();
-			decideToMove = decideToMove * 2;
-			int decideToMoveInt = (int) decideToMove;
-			Animal currentAnimal = animals[index];
-			if (!isAnimalValid(currentAnimal)) {
-				continue;
-			}
+	public Animal[] decideToMove(Animal[] animals, int index) {
+		double decideToMove = Math.random();
+		decideToMove = decideToMove * 2;
+		int decideToMoveInt = (int) decideToMove;
+		Animal currentAnimal = animals[index];
+		if (isAnimalValid(currentAnimal)) {
 			if (decideToMoveInt == ONE) {
 				currentAnimal.setMoving(true);
+				print(currentAnimal.getName() + " decided to move");
 			} else {
 				currentAnimal.setMoving(false);
+				print(currentAnimal.getName() + " decided to stay");
 			}
 			animals[index] = currentAnimal;
+		} else {
+			print(NO_ONE_TO_MOVE);
 		}
+		return animals;
 	}
 
 	private boolean isAnimalValid(Animal animal) {
-		return (animal instanceof Bear || animal instanceof Fish);
+		return isBear(animal) || isFish(animal);
 	}
 
 	public List<Integer> availableAnimalSlots(Animal[] animals) {
 		List<Integer> availableAnimalSlots = new ArrayList<Integer>();
 		for (int index = 0; index < animals.length; index++) {
 			Animal currentAnimal = animals[index];
-			if (currentAnimal != null && currentAnimal.getName() != null
-					&& currentAnimal.getName().equalsIgnoreCase(ANIMAL)) {
+			if (!isAnimalValid(currentAnimal)) {
 				availableAnimalSlots.add(index);
 			}
 		}
 		return availableAnimalSlots;
 	}
 
-	public int nextIndex(int index, Animal[] animals) {
+	public Animal[] dealWithCollision(int index, Animal[] animals) {
+		// same type
+		int nextIndex = nextIndex(index, animals);
+		if (isIndexValid(nextIndex)) {
+			Animal currentAnimal = animals[index];
+			Animal nextAnimal = animals[nextIndex];
+			if (isSameType(currentAnimal, nextAnimal)) { // animals are same
+				// allocate an available space
+				List<Integer> availableAnimalSlots = availableAnimalSlots(animals);
+				int indexOfAllocation = decideAllocation(availableAnimalSlots);
+				if (indexOfAllocation != INVALID_INDEX) {
+					int emptyAnimalSlot = availableAnimalSlots.get(indexOfAllocation);
+					if (isBear(currentAnimal)) {
+						animals[emptyAnimalSlot] = new Bear();
+						print("New bear allocated to " + emptyAnimalSlot);
+					} else {
+						animals[emptyAnimalSlot] = new Fish();
+						print("New fish allocated to " + emptyAnimalSlot);
+					}
+				} else {
+					print(NO_AVAILABLE_SPACE);
+				}
+			} else if (!isFish(nextAnimal) && !isBear(nextAnimal)) { // available next slot
+				animals[index] = new Animal();
+				if (isFish(currentAnimal)) {
+					animals[nextIndex] = new Fish();
+					print("Fish moves from " + index + " to " + nextIndex);
+				} else {
+					animals[nextIndex] = new Bear();
+					print("Bear moves from " + index + " to " + nextIndex);
+				}
+			} else { // kill fish
+				if (isFish(currentAnimal)) {
+					animals[index] = new Animal();
+					print("Fish in index " + index + " is killed by bear in index " + nextIndex);
+				} else {
+					animals[nextIndex] = new Animal();
+					print("Fish in index " + nextIndex + " is killed by bear in index " + index);
+				}
+			}
+		} else {
+			print(INVALID_NEXT_INDEX);
+		}
+		return animals;
+	}
+
+	private int decideAllocation(List<Integer> availableAnimalSlots) {
+		if (availableAnimalSlots != null && !availableAnimalSlots.isEmpty()) {
+			int sizeOfAvailableAnimalSlots = availableAnimalSlots.size();
+			double decider = Math.random() * sizeOfAvailableAnimalSlots;
+			return (int) decider;
+		} else {
+			return INVALID_INDEX;
+		}
+	}
+
+	private boolean isSameType(Animal currentAnimal, Animal nextAnimal) {
+		boolean areBothBear = isBear(currentAnimal) && isBear(nextAnimal);
+		boolean areBothFish = isFish(currentAnimal) && isFish(nextAnimal);
+		return areBothBear || areBothFish;
+	}
+
+	private boolean isIndexValid(int index) {
+		return index != INVALID_INDEX;
+	}
+
+	private int nextIndex(int index, Animal[] animals) {
 		if (animals != null && animals.length > 0) {
 			return (index + 1) % animals.length;
 		} else {
@@ -122,16 +190,12 @@ public class ArrayHelper {
 		}
 	}
 
-	public void dealWithCollision(int index, Animal[] animals) {
-
+	private boolean isBear(Animal animal) {
+		return animal instanceof Bear;
 	}
 
-	public void moveWithoutCollision(int index, Animal[] animals) {
-
-	}
-
-	public void doNotMove(int index, Animal[] animals) {
-
+	private boolean isFish(Animal animal) {
+		return animal instanceof Fish;
 	}
 
 	private void print(String toBePrinted) {

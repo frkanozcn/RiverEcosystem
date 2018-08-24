@@ -24,36 +24,28 @@ public class Tester {
 		PrinterHelper printerHelper = new PrinterHelper();
 		// declerations
 		Animal[] animals = arrayHelper.generateAnimalArray(NUMBER_OF_ANIMALS);
-		List<Integer> availableAnimalSlots = arrayHelper.availableAnimalSlots(animals);
-		boolean isCollisionCase = FALSE;
 		// iteration started
 		printerHelper.print(ITERATION_STARTED);
-		for (int iteration = 0; iteration < NUMBER_OF_ITERATIONS; iteration++) {
-			int iterationToString = iteration + 1;
-			printerHelper.print("Iteration: " + iterationToString);
-		}
+		/*
+		 * for (int iteration = 0; iteration < NUMBER_OF_ITERATIONS; iteration++) { int
+		 * iterationToString = iteration + 1; printerHelper.print("Iteration: " +
+		 * iterationToString); }
+		 */
 		// test area: for 1 iteration
-		arrayHelper.decideToMove(animals);
-		printerHelper.printAnimalArray(animals);
+		List<Integer> availableAnimalSlots = arrayHelper.availableAnimalSlots(animals);
 		printerHelper.printAvailableAnimalSlots(availableAnimalSlots);
-		for (int index = 0; index < animals.length; index++) {
-			int nextIndex = arrayHelper.nextIndex(index, animals);
+		for (int index = 0; index < NUMBER_OF_ANIMALS; index++) {
+			printerHelper.print("Current index: " + index);
+			animals = arrayHelper.decideToMove(animals, index);
 			boolean isCurrentAnimalMoving = animals[index].isMoving();
-			boolean isNextAnimalMoving = animals[nextIndex].isMoving();
-			isCollisionCase = isCurrentAnimalMoving && !isNextAnimalMoving;
-			if (isCollisionCase) { // currentAnimal will collide with the next animal
-				arrayHelper.dealWithCollision(index, animals);
-			} else if (isCurrentAnimalMoving) { // next animal will move to index + 2 and current animal will move to
-												// index + 1
-				arrayHelper.moveWithoutCollision(index, animals);
-			} else {
-				arrayHelper.doNotMove(index, animals); // do not matter if the next animal moves or not
+			if (isCurrentAnimalMoving) {
+				animals = arrayHelper.dealWithCollision(index, animals);
 			}
-			// array manipulation will be hard
-			// try to put currentIndex variable in Animal class
-			// think about declaring move functions in IAnimal
+			printerHelper.printAnimalArray(animals);
+			availableAnimalSlots = arrayHelper.availableAnimalSlots(animals);
+			printerHelper.printAvailableAnimalSlots(availableAnimalSlots);
+			printerHelper.print("-----");
 		}
-		// think about declaring move functions in IAnimal
 	}
 
 }

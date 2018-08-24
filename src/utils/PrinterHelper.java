@@ -19,15 +19,17 @@ public class PrinterHelper {
 
 	public void printAnimalArray(Animal[] animals) {
 		if (animals != null && animals.length != ZERO) {
+			int index = ZERO;
 			for (Animal animal : animals) {
 				if (animal != null) {
 					String animalName = animal.getName();
 					if (animal.isMoving()) {
-						print(animalName + MOVING);
+						print(index + " - " + animalName + MOVING);
 					} else {
-						print(animalName + NOT_MOVING);
+						print(index + " - " + animalName + NOT_MOVING);
 					}
 				}
+				index++;
 			}
 		}
 	}
