@@ -11,7 +11,7 @@ public class PrinterHelper {
 	private static final String NOT_MOVING = " is not moving";
 	private static final String EMPTY_STRING = "";
 	private static final String COMMA_AND_SPACE = ", ";
-	private static final String AVAILABLE_ANIMAL_SLOTS = "Available animal slots: ";
+	private static final String AVAILABLE_ANIMAL_SLOTS = "Available animal slots";
 
 	public void print(String input) {
 		System.out.println(input);
@@ -47,7 +47,7 @@ public class PrinterHelper {
 				int toPrintSize = toPrint.length();
 				toPrint = toPrint.substring(ZERO, toPrintSize - 2);
 			}
-			print(AVAILABLE_ANIMAL_SLOTS + toPrint);
+			print(AVAILABLE_ANIMAL_SLOTS + " (" + sizeOfAvailableAnimalSlots + "): " + toPrint);
 		}
 	}
 }

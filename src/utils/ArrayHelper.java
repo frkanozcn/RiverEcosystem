@@ -198,6 +198,24 @@ public class ArrayHelper {
 		return animal instanceof Fish;
 	}
 
+	public int numberOfBears(Animal[] animals) {
+		int bearCounter = 0;
+		for (Animal animal : animals) {
+			if (isBear(animal))
+				bearCounter++;
+		}
+		return bearCounter;
+	}
+
+	public int numberOfFishes(Animal[] animals) {
+		int fishCounter = 0;
+		for (Animal animal : animals) {
+			if (isFish(animal))
+				fishCounter++;
+		}
+		return fishCounter;
+	}
+
 	private void print(String toBePrinted) {
 		PrinterHelper printerHelper = new PrinterHelper();
 		printerHelper.print(toBePrinted);

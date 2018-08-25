@@ -10,8 +10,8 @@ import utils.PrinterHelper;
 public class Tester {
 
 	// integers
-	private static final int NUMBER_OF_ANIMALS = 10;
-	private static final int NUMBER_OF_ITERATIONS = 1;
+	private static final int NUMBER_OF_ANIMALS = 100;
+	private static final int NUMBER_OF_ITERATIONS = 11; // 11 is critical for fishes
 	// strings
 	private static final String ITERATION_STARTED = "Iteration started...";
 	// booleans
@@ -22,16 +22,22 @@ public class Tester {
 		// helper classes
 		ArrayHelper arrayHelper = new ArrayHelper();
 		PrinterHelper printerHelper = new PrinterHelper();
-		// declerations
+		// declarations
 		Animal[] animals = arrayHelper.generateAnimalArray(NUMBER_OF_ANIMALS);
 		// iteration started
 		printerHelper.print(ITERATION_STARTED);
-		/*
-		 * for (int iteration = 0; iteration < NUMBER_OF_ITERATIONS; iteration++) { int
-		 * iterationToString = iteration + 1; printerHelper.print("Iteration: " +
-		 * iterationToString); }
-		 */
-		// test area: for 1 iteration
+		Long startTime = System.currentTimeMillis();
+		for (int iteration = 0; iteration < NUMBER_OF_ITERATIONS; iteration++) {
+			int iterationToString = iteration + 1;
+			printerHelper.print("Iteration: " + iterationToString);
+			simulateIteration(arrayHelper, printerHelper, animals);
+		}
+		Long endTime = System.currentTimeMillis();
+		Long timeElapsed = endTime - startTime;
+		printerHelper.print(timeElapsed.toString());
+	}
+
+	private static void simulateIteration(ArrayHelper arrayHelper, PrinterHelper printerHelper, Animal[] animals) {
 		List<Integer> availableAnimalSlots = arrayHelper.availableAnimalSlots(animals);
 		printerHelper.printAvailableAnimalSlots(availableAnimalSlots);
 		for (int index = 0; index < NUMBER_OF_ANIMALS; index++) {
@@ -44,6 +50,10 @@ public class Tester {
 			printerHelper.printAnimalArray(animals);
 			availableAnimalSlots = arrayHelper.availableAnimalSlots(animals);
 			printerHelper.printAvailableAnimalSlots(availableAnimalSlots);
+			int numberOfBears = arrayHelper.numberOfBears(animals);
+			int numberOfFishes = arrayHelper.numberOfFishes(animals);
+			printerHelper.print("Number of bears: " + numberOfBears);
+			printerHelper.print("Number of fishes: " + numberOfFishes);
 			printerHelper.print("-----");
 		}
 	}
